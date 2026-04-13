@@ -1,216 +1,153 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VinlandVibe App</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<style>
-:root{
---bg:#0a0a0a;
---card:#111;
---accent:#ff2e63;
---text:#eee;
-}
+<title>VinlandVibe Insta Clone</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- Firebase --><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script><style>
+:root{--bg:#000;--text:#fff;--accent:#ff2e63;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:system-ui;background:var(--bg);color:var(--text);}
+body{font-family:-apple-system,system-ui;background:var(--bg);color:var(--text);} 
 
 header{
-position:fixed;top:0;left:0;right:0;
+position:fixed;top:0;width:100%;
 display:flex;justify-content:space-between;
-padding:14px;background:#0a0a0af0;
-z-index:100;border-bottom:1px solid #222;
+padding:12px;background:#000;border-bottom:1px solid #222;z-index:100;
 }
-.logo{
-font-weight:900;font-size:22px;
-background:linear-gradient(90deg,#ff2e63,#f9d423);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
+.logo{font-weight:700;font-size:20px;}
 
-.feed{
-margin-top:70px;
-max-width:500px;
-margin-inline:auto;
-padding-bottom:80px;
-}
+.feed{margin-top:60px;max-width:500px;margin:auto;padding-bottom:80px;}
 
-.post{
-background:var(--card);
-margin:15px;
-border-radius:16px;
-overflow:hidden;
-border:1px solid #222;
-}
+.post{border-bottom:1px solid #222;margin-bottom:15px;}
 
-.post img{
-width:100%;
-display:block;
-object-fit:cover;
+.post-header{display:flex;align-items:center;padding:10px;gap:10px;}
+.post-header img{width:32px;height:32px;border-radius:50%;}
+
+.post-img{width:100%;aspect-ratio:1/1;object-fit:cover;}
+
+.actions{display:flex;gap:15px;padding:10px;font-size:22px;}
+.actions i{cursor:pointer;}
+.liked{color:var(--accent);}
+
+.likes{padding:0 12px;font-weight:600;font-size:14px;}
+.caption{padding:4px 12px;font-size:14px;}
+.comments{padding:4px 12px;font-size:13px;color:#bbb;}
+
+input{width:100%;padding:10px;background:#000;border:none;color:#fff;border-top:1px solid #222;}
+
+.upload{
+position:fixed;bottom:80px;right:15px;
+background:var(--accent);
+padding:14px;border-radius:50%;cursor:pointer;
 }
 
-.post-header{
-display:flex;
-gap:10px;
-padding:10px;
-align-items:center;
-}
+</style></head><body><header>
+<div class="logo">Vinland</div>
+<i class="fas fa-paper-plane"></i>
+</header><div class="feed" id="feed"></div><input type="file" id="file" hidden>
+<div class="upload" onclick="document.getElementById('file').click()">
+<i class="fas fa-plus"></i>
+</div><script>
 
-.actions{
-display:flex;
-gap:18px;
-padding:10px;
-font-size:22px;
-}
-
-.actions i{
-cursor:pointer;
-transition:.2s;
-}
-
-.liked{
-color:var(--accent);
-transform:scale(1.2);
-}
-
-.caption{
-padding:0 12px 8px;
-font-size:14px;
-}
-
-.comments{
-padding:0 12px 10px;
-font-size:13px;
-color:#bbb;
-}
-
-input{
-width:100%;
-padding:8px;
-border:none;
-background:#222;
-color:white;
-border-radius:8px;
-margin-top:6px;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-<div class="logo">VINLAND</div>
-</header>
-
-<div class="feed" id="feed"></div>
-
-<script>
-
-// 🔥 PUT YOUR FIREBASE CONFIG HERE
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
+// 🔥 FIREBASE CONFIG (PUT YOURS)
+const firebaseConfig={
+ apiKey:"YOUR_KEY",
+ authDomain:"YOUR_DOMAIN",
+ projectId:"YOUR_ID",
+ storageBucket:"YOUR_BUCKET"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
+const auth=firebase.auth();
+const storage=firebase.storage();
 
-// ✅ YOUR IMAGES (HIGH QUALITY)
-const images = [
-"https://i.ibb.co/Y7pLhtFB/1.jpg",
-"https://i.ibb.co/TxDH8D9n/2.jpg",
-"https://i.ibb.co/rGYsrv0L/3.jpg",
-"https://i.ibb.co/KzcQXyLK/4.jpg",
-"https://i.ibb.co/Cs50jMVx/5.jpg",
-"https://i.ibb.co/Qv6n5TZL/6.jpg",
-"https://i.ibb.co/ZDPSXYm/7.jpg",
-"https://i.ibb.co/PvN3Zch4/8.jpg"
-];
+// 🔐 LOGIN WITH GOOGLE
+const provider=new firebase.auth.GoogleAuthProvider();
+auth.signInWithPopup(provider);
 
-const feed = document.getElementById("feed");
+// 📤 UPLOAD IMAGE
+const fileInput=document.getElementById("file");
+fileInput.onchange=async()=>{
+const file=fileInput.files[0];
+const ref=storage.ref("posts/"+Date.now());
+await ref.put(file);
+const url=await ref.getDownloadURL();
 
-images.forEach((src,index)=>{
-
-const post = document.createElement("div");
-post.className = "post";
-
-post.innerHTML = `
-<div class="post-header">
-<strong>Kartikey</strong>
-</div>
-
-<img src="${src}">
-
-<div class="actions">
-<i class="fas fa-heart" id="like-${index}"></i>
-<i class="fas fa-comment"></i>
-</div>
-
-<div class="caption">Vinland energy 🔥</div>
-
-<div class="comments" id="comments-${index}"></div>
-
-<input placeholder="Add comment..." id="input-${index}">
-`;
-
-feed.appendChild(post);
-
-// ❤️ LIKE SYSTEM (stored)
-const likeBtn = document.getElementById(`like-${index}`);
-likeBtn.onclick = ()=>{
-likeBtn.classList.toggle("liked");
-
-db.collection("likes").add({
-post:index,
+await db.collection("posts").add({
+image:url,
+user:auth.currentUser.displayName,
+likes:0,
 time:Date.now()
 });
 };
 
-// 💬 COMMENT SYSTEM (stored + live)
-const input = document.getElementById(`input-${index}`);
+const feed=document.getElementById("feed");
 
-input.addEventListener("keypress", e=>{
-if(e.key==="Enter" && input.value.trim()!==""){
+// 🔄 LOAD POSTS LIVE
+ db.collection("posts").orderBy("time","desc").onSnapshot(snapshot=>{
+ feed.innerHTML="";
+ snapshot.forEach(doc=>{
+ const data=doc.data();
 
-db.collection("comments").add({
-post:index,
-text:input.value,
-time:Date.now()
-});
+ const post=document.createElement("div");
+ post.className="post";
 
-input.value="";
-}
-});
+ post.innerHTML=`
+ <div class="post-header">
+ <img src="${data.image}">
+ <strong>${data.user}</strong>
+ </div>
 
-// 🔄 LIVE COMMENTS LOAD
-db.collection("comments")
-.onSnapshot(snapshot=>{
+ <img src="${data.image}" class="post-img">
 
-const box = document.getElementById(`comments-${index}`);
-box.innerHTML="";
+ <div class="actions">
+ <i class="fas fa-heart"></i>
+ <i class="fas fa-comment"></i>
+ </div>
 
-snapshot.forEach(doc=>{
-const data = doc.data();
+ <div class="likes">${data.likes} likes</div>
+ <div class="caption"><strong>${data.user}</strong> 🔥</div>
+ <div class="comments"></div>
+ <input placeholder="Add comment...">
+ `;
 
-if(data.post===index){
-const div = document.createElement("div");
-div.textContent = "User: " + data.text;
-box.appendChild(div);
-}
-});
+ const likeBtn=post.querySelector(".fa-heart");
+ const likesText=post.querySelector(".likes");
 
-});
+ likeBtn.onclick=()=>{
+ likeBtn.classList.toggle("liked");
+ db.collection("posts").doc(doc.id).update({
+ likes:data.likes+1
+ });
+ };
 
-});
+ const input=post.querySelector("input");
+ const commentBox=post.querySelector(".comments");
 
-</script>
+ input.addEventListener("keypress",e=>{
+ if(e.key==="Enter" && input.value!=""){
+ db.collection("comments").add({
+ post:doc.id,
+ text:input.value
+ });
+ input.value="";
+ }
+ });
 
-</body>
+ db.collection("comments").onSnapshot(snap=>{
+ commentBox.innerHTML="";
+ snap.forEach(c=>{
+ const d=c.data();
+ if(d.post===doc.id){
+ const div=document.createElement("div");
+ div.textContent=d.text;
+ commentBox.appendChild(div);
+ }
+ });
+ });
+
+ feed.appendChild(post);
+ });
+ });
+
+</script></body>
 </html>
