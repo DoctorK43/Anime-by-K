@@ -1,92 +1,136 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VinlandVibe Stable</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script><style>
-body{margin:0;background:#000;color:#fff;font-family:system-ui;}
-header{padding:12px;border-bottom:1px solid #222;display:flex;justify-content:space-between;}
-.feed{max-width:500px;margin:auto;margin-top:10px;}
-.post img{width:100%;display:block;}
-.post{border-bottom:1px solid #222;margin-bottom:10px;}
-.actions{padding:10px;font-size:22px;display:flex;gap:15px;}
-.liked{color:red;}
-button{padding:10px;margin:10px;background:#ff2e63;color:#fff;border:none;border-radius:8px;}
-</style></head><body><header>
-<div>Vinland</div>
-<button onclick="login()">Login</button>
-</header><div class="feed" id="feed"></div><input type="file" id="file" hidden>
-<button onclick="document.getElementById('file').click()">Upload</button><script>
+<title>Vinland Feed</title>
 
-// 🔥 REPLACE THIS
-const firebaseConfig={
- apiKey:"AIzaSyBOA1aWIwVRmJOhP_TbppdjknjfRpML3sg",
- authDomain:"vinland-7629d.firebaseapp.com",
- projectId:"vinland-7629d",
- storageBucket:"vinland-7629d.appspot.com",
- messagingSenderId:"435734552310",
- appId:"1:435734552310:web:90f219f4c68d22afed96d7",
- measurementId:"G-BYENLVJYXS"
-};
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-const auth=firebase.auth();
-const storage=firebase.storage();
-
-// LOGIN BUTTON FIX (no auto popup)
-function login(){
-const provider=new firebase.auth.GoogleAuthProvider();
-auth.signInWithPopup(provider).catch(()=>alert("Enable popups or use correct Firebase config"));
+<style>
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:-apple-system,system-ui;
 }
 
-// UPLOAD
-const fileInput=document.getElementById("file");
-fileInput.onchange=async()=>{
-if(!auth.currentUser) return alert("Login first");
+header{
+padding:12px;
+border-bottom:1px solid #222;
+font-weight:700;
+font-size:18px;
+}
 
-const file=fileInput.files[0];
-const ref=storage.ref("posts/"+Date.now());
-await ref.put(file);
-const url=await ref.getDownloadURL();
+.feed{
+max-width:500px;
+margin:auto;
+}
 
-await db.collection("posts").add({
-image:url,
-user:auth.currentUser.displayName,
-likes:0,
-time:Date.now()
-});
-};
+.post{
+border-bottom:1px solid #222;
+margin-bottom:15px;
+}
 
-const feed=document.getElementById("feed");
+.post img{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+}
 
-// LOAD POSTS (SAFE)
-db.collection("posts").orderBy("time","desc").onSnapshot(snapshot=>{
-feed.innerHTML="";
+.actions{
+display:flex;
+gap:15px;
+padding:10px;
+font-size:22px;
+}
 
-snapshot.forEach(doc=>{
-const data=doc.data();
+.liked{
+color:#ff2e63;
+}
 
-const post=document.createElement("div");
-post.className="post";
+.caption{
+padding:0 12px 10px;
+}
 
-post.innerHTML=`
-<img src="${data.image}" onerror="this.src='https://via.placeholder.com/400'">
+.comments{
+padding:0 12px 10px;
+font-size:13px;
+color:#bbb;
+}
+
+input{
+width:100%;
+padding:10px;
+background:#000;
+border:none;
+color:#fff;
+border-top:1px solid #222;
+}
+</style>
+</head>
+
+<body>
+
+<header>Vinland</header>
+
+<div class="feed" id="feed"></div>
+
+<script>
+
+// HD images (clear)
+const images = [
+"https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d",
+"https://images.unsplash.com/photo-1492724441997-5dc865305da7",
+"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+"https://images.unsplash.com/photo-1519681393784-d120267933ba"
+];
+
+const feed = document.getElementById("feed");
+
+images.forEach(src => {
+
+const post = document.createElement("div");
+post.className = "post";
+
+post.innerHTML = `
+<img src="${src}">
+
 <div class="actions">
 <i class="fas fa-heart"></i>
+<i class="fas fa-comment"></i>
 </div>
-<div style="padding:10px">${data.likes} likes</div>
+
+<div class="caption"><b>Kartikey</b> Vinland vibe 🔥</div>
+<div class="comments"></div>
+
+<input placeholder="Add comment...">
 `;
 
-const likeBtn=post.querySelector("i");
-likeBtn.onclick=()=>{
+feed.appendChild(post);
+
+// ❤️ like
+const likeBtn = post.querySelector(".fa-heart");
+likeBtn.onclick = () => {
 likeBtn.classList.toggle("liked");
-db.collection("posts").doc(doc.id).update({likes:data.likes+1});
 };
 
-feed.appendChild(post);
+// 💬 comment
+const input = post.querySelector("input");
+const box = post.querySelector(".comments");
+
+input.addEventListener("keypress", e => {
+if(e.key === "Enter" && input.value !== ""){
+const div = document.createElement("div");
+div.textContent = "You: " + input.value;
+box.appendChild(div);
+input.value = "";
+}
 });
 
 });
 
-</script></body>
+</script>
+
+</body>
 </html>
