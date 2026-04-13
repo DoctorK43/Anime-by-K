@@ -1,9 +1,17 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VinlandVibe Ultra FIXED</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><style>
+<title>VinlandVibe App</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<style>
 :root{
 --bg:#0a0a0a;
 --card:#111;
@@ -11,50 +19,111 @@
 --text:#eee;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:system-ui;background:var(--bg);color:var(--text);} 
+body{font-family:system-ui;background:var(--bg);color:var(--text);}
 
-header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:14px;background:#0a0a0af0;z-index:100;backdrop-filter:blur(10px);} 
-.logo{font-weight:900;font-size:24px;background:linear-gradient(90deg,#ff2e63,#f9d423);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+header{
+position:fixed;top:0;left:0;right:0;
+display:flex;justify-content:space-between;
+padding:14px;background:#0a0a0af0;
+z-index:100;border-bottom:1px solid #222;
+}
+.logo{
+font-weight:900;font-size:22px;
+background:linear-gradient(90deg,#ff2e63,#f9d423);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-.feed{margin-top:70px;padding-bottom:90px;max-width:500px;margin-inline:auto;}
-.post{background:var(--card);margin:15px;border-radius:16px;overflow:hidden;position:relative;border:1px solid #222;} 
-.post img{width:100%;display:block;} 
+.feed{
+margin-top:70px;
+max-width:500px;
+margin-inline:auto;
+padding-bottom:80px;
+}
 
-.post-header{display:flex;gap:10px;padding:10px;align-items:center;} 
-.post-header img{width:38px;height:38px;border-radius:50%;object-fit:cover;} 
+.post{
+background:var(--card);
+margin:15px;
+border-radius:16px;
+overflow:hidden;
+border:1px solid #222;
+}
 
-.actions{display:flex;gap:18px;padding:10px;font-size:22px;} 
-.actions i{cursor:pointer;} 
-.actions i.liked{color:var(--accent);} 
+.post img{
+width:100%;
+display:block;
+object-fit:cover;
+}
 
-.caption{padding:0 12px 12px;font-size:14px;} 
+.post-header{
+display:flex;
+gap:10px;
+padding:10px;
+align-items:center;
+}
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:#0a0a0af5;border-top:1px solid #222;} 
+.actions{
+display:flex;
+gap:18px;
+padding:10px;
+font-size:22px;
+}
 
-.heart{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:80px;color:white;pointer-events:none;} 
-.heart.show{animation:pop .6s ease;} 
-@keyframes pop{0%{transform:translate(-50%,-50%) scale(0);opacity:1}50%{transform:translate(-50%,-50%) scale(1.2)}100%{transform:translate(-50%,-50%) scale(0);opacity:0}} 
+.actions i{
+cursor:pointer;
+transition:.2s;
+}
 
-.modal{position:fixed;inset:0;background:black;display:none;justify-content:center;align-items:center;z-index:200;} 
-.modal img{max-width:100%;max-height:100%;} 
-.modal.active{display:flex;} 
+.liked{
+color:var(--accent);
+transform:scale(1.2);
+}
 
-.download{position:absolute;top:10px;right:10px;background:#000a;padding:8px;border-radius:50%;cursor:pointer;} 
-</style></head><body><header>
+.caption{
+padding:0 12px 8px;
+font-size:14px;
+}
+
+.comments{
+padding:0 12px 10px;
+font-size:13px;
+color:#bbb;
+}
+
+input{
+width:100%;
+padding:8px;
+border:none;
+background:#222;
+color:white;
+border-radius:8px;
+margin-top:6px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
 <div class="logo">VINLAND</div>
-<i class="fas fa-bell"></i>
-</header><div class="feed" id="feed"></div><div class="modal" id="modal">
-<img id="modalImg">
-</div><div class="bottom-nav">
-<i class="fas fa-home"></i>
-<i class="fas fa-compass"></i>
-<i class="fas fa-plus-circle" style="color:var(--accent);"></i>
-<i class="fas fa-heart"></i>
-<i class="fas fa-user"></i>
-</div><script>
+</header>
 
-// ✅ FIXED DIRECT IMAGE LINKS (WORKING)
-const images=[
+<div class="feed" id="feed"></div>
+
+<script>
+
+// 🔥 PUT YOUR FIREBASE CONFIG HERE
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ✅ YOUR IMAGES (HIGH QUALITY)
+const images = [
 "https://i.ibb.co/Y7pLhtFB/1.jpg",
 "https://i.ibb.co/TxDH8D9n/2.jpg",
 "https://i.ibb.co/rGYsrv0L/3.jpg",
@@ -65,70 +134,83 @@ const images=[
 "https://i.ibb.co/PvN3Zch4/8.jpg"
 ];
 
-const feed=document.getElementById("feed");
+const feed = document.getElementById("feed");
 
-images.forEach(src=>{
-const post=document.createElement("div");
-post.className="post";
+images.forEach((src,index)=>{
 
-post.innerHTML=`
+const post = document.createElement("div");
+post.className = "post";
+
+post.innerHTML = `
 <div class="post-header">
-<img src="${src}">
-<div><strong>Kartikey</strong><br><small>Now</small></div>
+<strong>Kartikey</strong>
 </div>
 
-<img src="${src}" class="main-img">
-
-<div class="download"><i class="fas fa-download"></i></div>
-
-<div class="heart"><i class="fas fa-heart"></i></div>
+<img src="${src}">
 
 <div class="actions">
-<i class="fas fa-heart like-btn"></i>
+<i class="fas fa-heart" id="like-${index}"></i>
 <i class="fas fa-comment"></i>
-<i class="fas fa-paper-plane"></i>
 </div>
 
-<div class="caption"><strong>Kartikey</strong> Vinland energy 🔥</div>
+<div class="caption">Vinland energy 🔥</div>
+
+<div class="comments" id="comments-${index}"></div>
+
+<input placeholder="Add comment..." id="input-${index}">
 `;
 
-const likeBtn=post.querySelector(".like-btn");
-likeBtn.onclick=()=> likeBtn.classList.toggle("liked");
-
-let lastTap=0;
-const img=post.querySelector(".main-img");
-const heart=post.querySelector(".heart");
-
-img.onclick=()=>{
-let now=Date.now();
-if(now-lastTap<300){
-heart.classList.add("show");
-likeBtn.classList.add("liked");
-setTimeout(()=>heart.classList.remove("show"),600);
-}
-lastTap=now;
-openModal(src);
-};
-
-post.querySelector(".download").onclick=()=>{
-const a=document.createElement("a");
-a.href=src;
-a.download="vinland.jpg";
-a.click();
-};
-
 feed.appendChild(post);
+
+// ❤️ LIKE SYSTEM (stored)
+const likeBtn = document.getElementById(`like-${index}`);
+likeBtn.onclick = ()=>{
+likeBtn.classList.toggle("liked");
+
+db.collection("likes").add({
+post:index,
+time:Date.now()
+});
+};
+
+// 💬 COMMENT SYSTEM (stored + live)
+const input = document.getElementById(`input-${index}`);
+
+input.addEventListener("keypress", e=>{
+if(e.key==="Enter" && input.value.trim()!==""){
+
+db.collection("comments").add({
+post:index,
+text:input.value,
+time:Date.now()
 });
 
-const modal=document.getElementById("modal");
-const modalImg=document.getElementById("modalImg");
-
-function openModal(src){
-modal.classList.add("active");
-modalImg.src=src;
+input.value="";
 }
+});
 
-modal.onclick=()=>modal.classList.remove("active");
+// 🔄 LIVE COMMENTS LOAD
+db.collection("comments")
+.onSnapshot(snapshot=>{
 
-</script></body>
+const box = document.getElementById(`comments-${index}`);
+box.innerHTML="";
+
+snapshot.forEach(doc=>{
+const data = doc.data();
+
+if(data.post===index){
+const div = document.createElement("div");
+div.textContent = "User: " + data.text;
+box.appendChild(div);
+}
+});
+
+});
+
+});
+
+</script>
+
+</body>
 </html>
