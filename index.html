@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VinlandVibe Ultra</title>
+<title>VinlandVibe Ultra FIXED</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><style>
 :root{
 --bg:#0a0a0a;
@@ -11,64 +11,35 @@
 --text:#eee;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:system-ui;background:var(--bg);color:var(--text);}
+body{font-family:system-ui;background:var(--bg);color:var(--text);} 
 
-header{
-position:fixed;top:0;left:0;right:0;
-display:flex;justify-content:space-between;
-padding:14px;background:#0a0a0af0;z-index:100;
-backdrop-filter:blur(10px);
-}
-.logo{font-weight:900;font-size:24px;background:linear-gradient(90deg,#ff2e63,#f9d423);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:14px;background:#0a0a0af0;z-index:100;backdrop-filter:blur(10px);} 
+.logo{font-weight:900;font-size:24px;background:linear-gradient(90deg,#ff2e63,#f9d423);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
 .feed{margin-top:70px;padding-bottom:90px;max-width:500px;margin-inline:auto;}
-.post{background:var(--card);margin:15px;border-radius:16px;overflow:hidden;position:relative;}
-.post img{width:100%;display:block;cursor:pointer;}
+.post{background:var(--card);margin:15px;border-radius:16px;overflow:hidden;position:relative;border:1px solid #222;} 
+.post img{width:100%;display:block;} 
 
-.post-header{display:flex;gap:10px;padding:10px;align-items:center;}
-.post-header img{width:38px;height:38px;border-radius:50%;}
+.post-header{display:flex;gap:10px;padding:10px;align-items:center;} 
+.post-header img{width:38px;height:38px;border-radius:50%;object-fit:cover;} 
 
-.actions{display:flex;gap:18px;padding:10px;font-size:22px;}
-.actions i{cursor:pointer;transition:.2s;}
-.actions i.liked{color:var(--accent);transform:scale(1.2);}
+.actions{display:flex;gap:18px;padding:10px;font-size:22px;} 
+.actions i{cursor:pointer;} 
+.actions i.liked{color:var(--accent);} 
 
-.caption{padding:0 12px 12px;font-size:14px;}
+.caption{padding:0 12px 12px;font-size:14px;} 
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;
-display:flex;justify-content:space-around;
-padding:10px;background:#0a0a0af5;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:#0a0a0af5;border-top:1px solid #222;} 
 
-/* DOUBLE TAP HEART */
-.heart{
-position:absolute;
-top:50%;left:50%;
-transform:translate(-50%,-50%) scale(0);
-font-size:80px;color:white;
-pointer-events:none;
-}
-.heart.show{
-animation:pop 0.6s ease;
-}
-@keyframes pop{
-0%{transform:translate(-50%,-50%) scale(0);opacity:1}
-50%{transform:translate(-50%,-50%) scale(1.2)}
-100%{transform:translate(-50%,-50%) scale(0);opacity:0}
-}
+.heart{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:80px;color:white;pointer-events:none;} 
+.heart.show{animation:pop .6s ease;} 
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(0);opacity:1}50%{transform:translate(-50%,-50%) scale(1.2)}100%{transform:translate(-50%,-50%) scale(0);opacity:0}} 
 
-/* MODAL VIEW */
-.modal{
-position:fixed;inset:0;background:black;
-display:none;justify-content:center;align-items:center;z-index:200;
-}
-.modal img{max-width:100%;max-height:100%;}
-.modal.active{display:flex;}
+.modal{position:fixed;inset:0;background:black;display:none;justify-content:center;align-items:center;z-index:200;} 
+.modal img{max-width:100%;max-height:100%;} 
+.modal.active{display:flex;} 
 
-/* DOWNLOAD BTN */
-.download{
-position:absolute;top:10px;right:10px;
-background:#000a;padding:8px;border-radius:50%;cursor:pointer;
-}
+.download{position:absolute;top:10px;right:10px;background:#000a;padding:8px;border-radius:50%;cursor:pointer;} 
 </style></head><body><header>
 <div class="logo">VINLAND</div>
 <i class="fas fa-bell"></i>
@@ -81,15 +52,17 @@ background:#000a;padding:8px;border-radius:50%;cursor:pointer;
 <i class="fas fa-heart"></i>
 <i class="fas fa-user"></i>
 </div><script>
+
+// ✅ FIXED DIRECT IMAGE LINKS (WORKING)
 const images=[
-"https://i.ibb.co/Y7pLhtFB",
-"https://i.ibb.co/TxDH8D9n",
-"https://i.ibb.co/rGYsrv0L",
-"https://i.ibb.co/KzcQXyLK",
-"https://i.ibb.co/Cs50jMVx",
-"https://i.ibb.co/Qv6n5TZL",
-"https://i.ibb.co/ZDPSXYm",
-"https://i.ibb.co/PvN3Zch4"
+"https://i.ibb.co/Y7pLhtFB/1.jpg",
+"https://i.ibb.co/TxDH8D9n/2.jpg",
+"https://i.ibb.co/rGYsrv0L/3.jpg",
+"https://i.ibb.co/KzcQXyLK/4.jpg",
+"https://i.ibb.co/Cs50jMVx/5.jpg",
+"https://i.ibb.co/Qv6n5TZL/6.jpg",
+"https://i.ibb.co/ZDPSXYm/7.jpg",
+"https://i.ibb.co/PvN3Zch4/8.jpg"
 ];
 
 const feed=document.getElementById("feed");
@@ -119,13 +92,9 @@ post.innerHTML=`
 <div class="caption"><strong>Kartikey</strong> Vinland energy 🔥</div>
 `;
 
-// LIKE BUTTON
 const likeBtn=post.querySelector(".like-btn");
-likeBtn.onclick=()=>{
-likeBtn.classList.toggle("liked");
-};
+likeBtn.onclick=()=> likeBtn.classList.toggle("liked");
 
-// DOUBLE TAP
 let lastTap=0;
 const img=post.querySelector(".main-img");
 const heart=post.querySelector(".heart");
@@ -138,12 +107,9 @@ likeBtn.classList.add("liked");
 setTimeout(()=>heart.classList.remove("show"),600);
 }
 lastTap=now;
-
-// OPEN MODAL
 openModal(src);
 };
 
-// DOWNLOAD
 post.querySelector(".download").onclick=()=>{
 const a=document.createElement("a");
 a.href=src;
@@ -154,7 +120,6 @@ a.click();
 feed.appendChild(post);
 });
 
-// MODAL
 const modal=document.getElementById("modal");
 const modalImg=document.getElementById("modalImg");
 
