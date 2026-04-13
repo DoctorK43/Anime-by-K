@@ -1,186 +1,169 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VinlandVibe • Premium</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <style>
-    :root {
-      --bg: #0a0a0a;
-      --card: #111111;
-      --accent: #c8102e;
-      --text: #eeeeee;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-    }
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: rgba(10,10,10,0.95);
-      backdrop-filter: blur(12px);
-      z-index: 100;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #222;
-    }
-    .logo {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -2px;
-      background: linear-gradient(90deg, #c8102e, #ffcc33);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stories {
-      display: flex;
-      gap: 12px;
-      padding: 12px 8px;
-      overflow-x: auto;
-      background: var(--card);
-      margin-top: 60px;
-      border-bottom: 1px solid #222;
-    }
-    .story img {
-      width: 68px; height: 68px;
-      border-radius: 50%;
-      border: 3px solid var(--accent);
-      object-fit: cover;
-    }
-    .feed {
-      max-width: 680px;
-      margin: 20px auto;
-      padding-bottom: 80px;
-    }
-    .post {
-      background: var(--card);
-      margin-bottom: 24px;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid #222;
-    }
-    .post-header {
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .post-header img {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .post img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .actions {
-      padding: 12px;
-      display: flex;
-      gap: 18px;
-      font-size: 24px;
-    }
-    .caption {
-      padding: 0 16px 16px;
-      font-size: 15.5px;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(10,10,10,0.98);
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 0;
-      border-top: 1px solid #222;
-      z-index: 100;
-    }
-    .bottom-nav i { font-size: 26px; cursor: pointer; }
-  </style>
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VinlandVibe Ultra</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><style>
+:root{
+--bg:#0a0a0a;
+--card:#111;
+--accent:#ff2e63;
+--text:#eee;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:system-ui;background:var(--bg);color:var(--text);}
 
-  <header>
-    <div class="logo">VINLANDVIBE</div>
-    <div style="display:flex; gap:16px; font-size:22px;">
-      <i class="fas fa-search"></i>
-      <i class="fas fa-heart"></i>
-      <i class="fas fa-paper-plane"></i>
-    </div>
-  </header>
+header{
+position:fixed;top:0;left:0;right:0;
+display:flex;justify-content:space-between;
+padding:14px;background:#0a0a0af0;z-index:100;
+backdrop-filter:blur(10px);
+}
+.logo{font-weight:900;font-size:24px;background:linear-gradient(90deg,#ff2e63,#f9d423);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
-  <!-- Stories -->
-  <div class="stories">
-    <div class="story"><img src="https://i.imgur.com/YOUR_PHOTO.jpg" alt="You"><p>You</p></div>
-    <div class="story"><img src="https://picsum.photos/id/64/300/300" alt=""><p>Thorfinn</p></div>
-    <div class="story"><img src="https://picsum.photos/id/201/300/300" alt=""><p>Askeladd</p></div>
-    <div class="story"><img src="https://picsum.photos/id/866/300/300" alt=""><p>Canute</p></div>
-  </div>
+.feed{margin-top:70px;padding-bottom:90px;max-width:500px;margin-inline:auto;}
+.post{background:var(--card);margin:15px;border-radius:16px;overflow:hidden;position:relative;}
+.post img{width:100%;display:block;cursor:pointer;}
 
-  <!-- Feed with your Vinland Saga images -->
-  <div class="feed">
+.post-header{display:flex;gap:10px;padding:10px;align-items:center;}
+.post-header img{width:38px;height:38px;border-radius:50%;}
 
-    <div class="post">
-      <div class="post-header">
-        <img src="https://i.imgur.com/YOUR_PHOTO.jpg" alt="">
-        <div><strong>Kartikey</strong><br><small>Vinland • 1h</small></div>
-      </div>
-      <img src="https://i.postimg.cc/Your-Link-Here/3501.jpg" alt="Vinland Saga">
-      <div class="actions">
-        <i class="fas fa-heart"></i>
-        <i class="fas fa-comment"></i>
-        <i class="fas fa-paper-plane"></i>
-      </div>
-      <div class="caption"><strong>Kartikey</strong> "I have no enemies..." 🔥</div>
-    </div>
+.actions{display:flex;gap:18px;padding:10px;font-size:22px;}
+.actions i{cursor:pointer;transition:.2s;}
+.actions i.liked{color:var(--accent);transform:scale(1.2);}
 
-    <div class="post">
-      <div class="post-header">
-        <img src="https://i.postimg.cc/Your-Link-Here/3502.jpg" alt="">
-        <div><strong>VinlandSaga</strong><br><small>Official • 3h</small></div>
-      </div>
-      <img src="https://i.postimg.cc/Your-Link-Here/3502.jpg" alt="">
-      <div class="actions">
-        <i class="fas fa-heart"></i>
-        <i class="fas fa-comment"></i>
-        <i class="fas fa-paper-plane"></i>
-      </div>
-      <div class="caption"><strong>VinlandSaga</strong> The dream of a true warrior.</div>
-    </div>
+.caption{padding:0 12px 12px;font-size:14px;}
 
-    <div class="post">
-      <div class="post-header">
-        <img src="https://i.postimg.cc/Your-Link-Here/3503.jpg" alt="">
-        <div><strong>Kartikey</strong><br><small>Just now</small></div>
-      </div>
-      <img src="https://i.postimg.cc/Your-Link-Here/3503.jpg" alt="">
-      <div class="actions">
-        <i class="fas fa-heart"></i>
-        <i class="fas fa-comment"></i>
-        <i class="fas fa-paper-plane"></i>
-      </div>
-      <div class="caption"><strong>Kartikey</strong> Peak manga energy.</div>
-    </div>
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;
+display:flex;justify-content:space-around;
+padding:10px;background:#0a0a0af5;}
 
-    <!-- Add more posts the same way with the other images -->
+/* DOUBLE TAP HEART */
+.heart{
+position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%) scale(0);
+font-size:80px;color:white;
+pointer-events:none;
+}
+.heart.show{
+animation:pop 0.6s ease;
+}
+@keyframes pop{
+0%{transform:translate(-50%,-50%) scale(0);opacity:1}
+50%{transform:translate(-50%,-50%) scale(1.2)}
+100%{transform:translate(-50%,-50%) scale(0);opacity:0}
+}
 
-  </div>
+/* MODAL VIEW */
+.modal{
+position:fixed;inset:0;background:black;
+display:none;justify-content:center;align-items:center;z-index:200;
+}
+.modal img{max-width:100%;max-height:100%;}
+.modal.active{display:flex;}
 
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <i class="fas fa-home"></i>
-    <i class="fas fa-compass"></i>
-    <i class="fas fa-plus-circle" style="font-size:32px; color:var(--accent);"></i>
-    <i class="fas fa-heart"></i>
-    <img src="https://i.imgur.com/YOUR_PHOTO.jpg" style="width:28px; height:28px; border-radius:50%; border:2px solid var(--accent);" alt="">
-  </div>
+/* DOWNLOAD BTN */
+.download{
+position:absolute;top:10px;right:10px;
+background:#000a;padding:8px;border-radius:50%;cursor:pointer;
+}
+</style></head><body><header>
+<div class="logo">VINLAND</div>
+<i class="fas fa-bell"></i>
+</header><div class="feed" id="feed"></div><div class="modal" id="modal">
+<img id="modalImg">
+</div><div class="bottom-nav">
+<i class="fas fa-home"></i>
+<i class="fas fa-compass"></i>
+<i class="fas fa-plus-circle" style="color:var(--accent);"></i>
+<i class="fas fa-heart"></i>
+<i class="fas fa-user"></i>
+</div><script>
+const images=[
+"https://i.ibb.co/Y7pLhtFB",
+"https://i.ibb.co/TxDH8D9n",
+"https://i.ibb.co/rGYsrv0L",
+"https://i.ibb.co/KzcQXyLK",
+"https://i.ibb.co/Cs50jMVx",
+"https://i.ibb.co/Qv6n5TZL",
+"https://i.ibb.co/ZDPSXYm",
+"https://i.ibb.co/PvN3Zch4"
+];
 
-</body>
+const feed=document.getElementById("feed");
+
+images.forEach(src=>{
+const post=document.createElement("div");
+post.className="post";
+
+post.innerHTML=`
+<div class="post-header">
+<img src="${src}">
+<div><strong>Kartikey</strong><br><small>Now</small></div>
+</div>
+
+<img src="${src}" class="main-img">
+
+<div class="download"><i class="fas fa-download"></i></div>
+
+<div class="heart"><i class="fas fa-heart"></i></div>
+
+<div class="actions">
+<i class="fas fa-heart like-btn"></i>
+<i class="fas fa-comment"></i>
+<i class="fas fa-paper-plane"></i>
+</div>
+
+<div class="caption"><strong>Kartikey</strong> Vinland energy 🔥</div>
+`;
+
+// LIKE BUTTON
+const likeBtn=post.querySelector(".like-btn");
+likeBtn.onclick=()=>{
+likeBtn.classList.toggle("liked");
+};
+
+// DOUBLE TAP
+let lastTap=0;
+const img=post.querySelector(".main-img");
+const heart=post.querySelector(".heart");
+
+img.onclick=()=>{
+let now=Date.now();
+if(now-lastTap<300){
+heart.classList.add("show");
+likeBtn.classList.add("liked");
+setTimeout(()=>heart.classList.remove("show"),600);
+}
+lastTap=now;
+
+// OPEN MODAL
+openModal(src);
+};
+
+// DOWNLOAD
+post.querySelector(".download").onclick=()=>{
+const a=document.createElement("a");
+a.href=src;
+a.download="vinland.jpg";
+a.click();
+};
+
+feed.appendChild(post);
+});
+
+// MODAL
+const modal=document.getElementById("modal");
+const modalImg=document.getElementById("modalImg");
+
+function openModal(src){
+modal.classList.add("active");
+modalImg.src=src;
+}
+
+modal.onclick=()=>modal.classList.remove("active");
+
+</script></body>
 </html>
